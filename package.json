@@ -1,0 +1,20 @@
+{
+  "name": "sandbox",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+   "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "playwright": "^1.26.1",
+    "playwright-extra": "^4.3.5",
+    "puppeteer-extra-plugin-recaptcha": "^3.6.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.1"
+  },
+  "type": "module"
+}
