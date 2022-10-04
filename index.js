@@ -3,7 +3,7 @@ import stealth from 'puppeteer-extra-plugin-stealth'
 import bluebird from 'bluebird'
 import { addToRemoveQueue, getProxies, removeLines } from './utils.js'
 
-const init = async (i) => {
+const withBrowser = async (fn) => {
     // const proxy = getProxies(i)
     const options = {
         headless: false,
@@ -26,15 +26,29 @@ const init = async (i) => {
 
     const browser = await chromium.launch(options)
 
-    const page = await browser.newPage()
-
-    await page.goto("your-site")
-
-    await page.pause()
-
-    await page.close()
-
-    await browser.close()
+    try {
+        return await fn(browser)
+    } finally {
+        await browser.close()
+    }
 }
 
-bluebird.map(Array.from(Array(1), (_, i) => i), init, { concurrency: 1 })
+const withPage = (browser) => async (fn) => {
+    const page = await browser.newPage()
+
+    try {
+        return await fn(page)
+    } finally {
+        await page.close()
+    }
+}
+
+const results = await withBrowser(async (browser) => {
+    return bluebird.map(Array.from(Array(1), (_, i) => i), async (x) => {
+        await withPage(browser)( async (page) => {
+            await page.goto('https://google.com')
+            //  do something
+            return
+        })
+    }, { concurrency: 1 })
+})
