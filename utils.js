@@ -51,3 +51,13 @@ export const removeLines = () => {
     fs.writeFileSync('./proxies.txt', modifiedData, 'utf-8')
     console.log('proxies removed')
 }
+
+export const writeDataTxt = async (data) => {
+    let path = "example.txt"
+    const writeStream = fs.createWriteStream(path, { flags: 'a' })
+    if (!fs.existsSync(path)) {
+        writeStream.write("some header")
+    }
+    writeStream.write(data)
+    writeStream.end("\n")
+}
