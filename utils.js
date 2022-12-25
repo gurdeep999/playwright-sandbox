@@ -16,13 +16,6 @@ var proxiesToBeRemoved = []
 //     stream.end()
 // }
 
-export const getProxies = (i) => {
-    if (proxyData.length == 0) {
-        const proxies = fs.readFileSync('./proxies.txt', 'utf-8')
-        proxyData = parseProxies(proxies)
-    } else if (i > proxyData.length) console.log("All proxies used up")
-    return proxyData[i]
-}
 
 const parseProxies = (data) =>
     data.split('\r\n').map(p => {
@@ -33,11 +26,28 @@ const parseProxies = (data) =>
         }
     })
 
-// function blockingWait(seconds) {
-//     //simple blocking technique (wait...)
-//     var waitTill = new Date(new Date().getTime() + seconds * 1000);
-//     while (waitTill > new Date()) { }
-// }
+export const getProxies = (i) => {
+    if (proxyData.length == 0) {
+        const proxies = fs.readFileSync('./proxies.txt', 'utf-8')
+        proxyData = parseProxies(proxies)
+    } else if (i > proxyData.length) console.log("All proxies used up")
+    return proxyData[i]
+}
+
+export const getRandomProxies = () => {
+    if (proxyData.length == 0) {
+        const proxies = fs.readFileSync('./proxies.txt', 'utf-8')
+        proxyData = parseProxies(proxies)
+    }
+    return proxyData[Math.floor(Math.random() * proxyData.length)]
+}
+
+
+function blockingWait(seconds) {
+    //simple blocking technique (wait...)
+    var waitTill = new Date(new Date().getTime() + seconds * 1000);
+    while (waitTill > new Date()) { }
+}
 
 export function sleep(seconds) {
     return new Promise((resolve) => setTimeout(resolve, seconds * 1000))
